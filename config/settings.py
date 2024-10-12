@@ -12,7 +12,7 @@ https://docs.djangoproject.com/en/4.2/ref/settings/
 
 import os
 from pathlib import Path
-import config.db as db
+import dj_database_url
 from environ import Env
 
 env = Env()
@@ -44,7 +44,7 @@ INTERNAL_IPS = [
     'localhost:8000',
 ]
 
-CSRF_TRUSTED_ORIGINS = ['https://79a1-2806-2f0-1100-f110-48a-ef36-76ca-d1f9.ngrok-free.app']
+# CSRF_TRUSTED_ORIGINS = ['https://79a1-2806-2f0-1100-f110-48a-ef36-76ca-d1f9.ngrok-free.app']
 
 # Application definition
 
@@ -173,7 +173,16 @@ WSGI_APPLICATION = 'config.wsgi.application'
 # Database
 # https://docs.djangoproject.com/en/4.2/ref/settings/#databases
 
-DATABASES = db.SQLITE
+DATABASES = {
+    'default': {
+        'ENGINE': 'django.db.backends.sqlite3',
+        'NAME': os.path.join(BASE_DIR, 'db/sqlite/db.sqlite3'),
+    }
+}
+
+POSTGRESS_LOCALLY = False
+if ENVIRONMENT == 'production' or POSTGRESS_LOCALLY == True:
+    DATABASES['default'] = dj_database_url.parse(env('DATABASE_URL'))
 
 
 # Password validation
