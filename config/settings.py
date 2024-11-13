@@ -13,12 +13,10 @@ https://docs.djangoproject.com/en/4.2/ref/settings/
 import os
 from pathlib import Path
 import dj_database_url
-from environ import Env
+from decouple import config
 
-env = Env()
-Env.read_env()
 
-ENVIRONMENT = env('ENVIRONMENT', default='production')
+ENVIRONMENT = config('ENVIRONMENT', default='production')
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
@@ -27,9 +25,9 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 # See https://docs.djangoproject.com/en/4.2/howto/deployment/checklist/
 
 # SECURITY WARNING: keep the secret key used in production secret!
-SECRET_KEY = env('SECRET_KEY')
+SECRET_KEY = config('SECRET_KEY')
 
-ENCRYPT_KEY = env('ENCRYPT_KEY')
+ENCRYPT_KEY = config('ENCRYPT_KEY')
 
 # SECURITY WARNING: don't run with debug turned on in production!
 if ENVIRONMENT == 'development':
@@ -184,7 +182,7 @@ DATABASES = {
 
 POSTGRESS_LOCALLY = False
 if ENVIRONMENT == 'production' or POSTGRESS_LOCALLY == True:
-    DATABASES['default'] = dj_database_url.parse(env('DATABASE_URL'))
+    DATABASES['default'] = dj_database_url.parse(config('DATABASE_URL'))
 
 
 # Password validation
@@ -248,9 +246,9 @@ else:
     MEDIA_ROOT = os.path.join(BASE_DIR, 'media/')
 
 CLOUDINARY_STORAGE = {
-    'CLOUD_NAME': env('CLOUD_NAME'),
-    'API_KEY': env('CLOUD_API_KEY'),
-    'API_SECRET': env('CLOUD_API_SECRET')
+    'CLOUD_NAME': config('CLOUD_NAME'),
+    'API_KEY': config('CLOUD_API_KEY'),
+    'API_SECRET': config('CLOUD_API_SECRET')
 }
 
 LOGIN_REDIRECT_URL = '/'
